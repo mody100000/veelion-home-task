@@ -55,7 +55,7 @@ export function TaskItem({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <Button
           type="button"
           variant="status"

@@ -21,9 +21,9 @@ export function StatusFilter({
   return (
     <section
       aria-label="Filter tasks by status"
-      className={`rounded-xl border border-border bg-surface p-3 ${className}`}
+      className={`rounded-xl border border-border bg-surface p-2 ${className}`}
     >
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 justify-center">
         {FILTERS.map((filter) => {
           const active = filter.value === value;
 
