@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTasks } from "@/hooks/useTasks";
 import type { Task } from "@/types/api";
 import { Button } from "@/components/common/Button";
@@ -13,6 +13,7 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { ConfirmModal } from "@/components/common/ConfirmModal";
 import { Pagination } from "@/components/common/Pagination";
 import { toast } from "react-toastify";
+import { usePagination } from "@/hooks/usePagination";
 
 // Number of tasks to display per page
 const ITEMS_PER_PAGE = 5;
@@ -38,12 +39,13 @@ export function TaskDashboard() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task>();
   const [taskToDelete, setTaskToDelete] = useState<Task>();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // Reset to first page when filtering or searching
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, filter]);
+  const {
+    currentPage: safePage,
+    setCurrentPage,
+    totalPages,
+    paginatedItems: paginatedTasks,
+  } = usePagination(filteredTasks, ITEMS_PER_PAGE, [searchQuery, filter]);
 
   const handleToggle = async (task: Task) => {
     const success = await updateTaskStatus(task.id, !task.completed);
@@ -86,17 +88,6 @@ export function TaskDashboard() {
   };
 
   const isModalOpen = isCreateModalOpen || editingTask !== undefined;
-
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredTasks.length / ITEMS_PER_PAGE),
-  );
-  const safePage = Math.min(currentPage, totalPages);
-
-  const paginatedTasks = filteredTasks.slice(
-    (safePage - 1) * ITEMS_PER_PAGE,
-    safePage * ITEMS_PER_PAGE,
-  );
 
   return (
     <section className="grid gap-6">
