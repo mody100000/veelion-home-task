@@ -70,3 +70,11 @@ We significantly upgraded the Task Dashboard's functionality and UX with the fol
 - **Frontend Search & Pagination**: Implemented client-side search filtering and a reusable pagination component (triggered when exceeding 5 items per page).
 - **Full CRUD Capabilities**: Added a unified modal for creating tasks and editing titles, along with a confirmation modal for safe deletions.
 - **Overall UX Polish**: Replaced native browser alerts with custom modals, added `react-toastify` for toast notifications, and introduced a `LoadingSkeleton` for smooth data-fetching state transitions.
+
+## Activity Page
+
+We enhanced the Activity Log's functionality and UX with the following core features:
+
+- **Activity Stats Cards**: Added visual summary cards displaying total actions alongside specific counts for creations, updates, and deletions.
+- **Search, Filters, & Pagination**: Integrated text search, action-specific dropdown filtering, and our reusable `usePagination` hook to navigate large logs effortlessly.
+- **Refactored Logic & UI Polish**: Simplified the activity logging messages in the tasks context, refactored the Activity page to leverage a clean Server Component/Client Component architecture, and delivered a consistent, polished look and feel.

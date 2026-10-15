@@ -107,6 +107,15 @@ export function useTasks() {
           body: JSON.stringify({ completed }),
         });
 
+        // Log activity asynchronously
+        requestJson<any>("/api/activity", {
+          method: "POST",
+          body: JSON.stringify({
+            action: "status_changed",
+            info: `Task marked as ${completed ? "completed" : "pending"}`,
+          }),
+        }).catch((err) => console.error("Failed to log activity:", err));
+
         setTasks((previous) =>
           previous.map((task) => (task.id === taskId ? body.data : task)),
         );
@@ -136,6 +145,15 @@ export function useTasks() {
           body: JSON.stringify({ title }),
         });
 
+        // Log activity asynchronously
+        requestJson<any>("/api/activity", {
+          method: "POST",
+          body: JSON.stringify({
+            action: "created",
+            info: `New task created`,
+          }),
+        }).catch((err) => console.error("Failed to log activity:", err));
+
         setTasks((previous) => [body.data, ...previous]);
         return true;
       } catch (error) {
@@ -162,6 +180,15 @@ export function useTasks() {
           method: "PATCH",
           body: JSON.stringify({ title }),
         });
+
+        // Log activity asynchronously
+        requestJson<any>("/api/activity", {
+          method: "POST",
+          body: JSON.stringify({
+            action: "updated",
+            info: `Task updated`,
+          }),
+        }).catch((err) => console.error("Failed to log activity:", err));
 
         setTasks((previous) =>
           previous.map((task) => (task.id === taskId ? body.data : task)),
@@ -190,6 +217,15 @@ export function useTasks() {
         await requestJson<undefined>(`/api/tasks/${taskId}`, {
           method: "DELETE",
         });
+
+        // Log activity asynchronously
+        requestJson<any>("/api/activity", {
+          method: "POST",
+          body: JSON.stringify({
+            action: "deleted",
+            info: `Task deleted`,
+          }),
+        }).catch((err) => console.error("Failed to log activity:", err));
 
         setTasks((previous) => previous.filter((task) => task.id !== taskId));
         return true;

@@ -161,3 +161,18 @@ export async function getActivityFromBackend(): Promise<ActivityLog[]> {
 
   return body;
 }
+
+export async function createActivityInBackend(payload: {
+  action: string;
+  info: string;
+}): Promise<ActivityLog> {
+  const body = await requestBackendJson<ActivityLog>("/activity", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  return body;
+}
