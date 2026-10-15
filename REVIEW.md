@@ -36,6 +36,12 @@
 - **Why it matters:** Inconsistent UI feedback reduces trust and readability.
 - **improvement:** Use consistent card, button, and muted text patterns with shared classes.
 
+### 6) Sidebar and breadcrumb improve navigation flow
+
+- **What is improved:** Clear navigation improves user experience by providing context and reducing friction when navigating across different sections of the app.
+- **Why it matters:** The application lacked a consistent navigation structure, making it harder for users to understand their current location and move between pages with the basic back button.
+- **improvement:** Introduced a shared layout with a sidebar for primary navigation and breadcrumbs for contextual awareness, resulting in a more scalable and user-friendly structure.
+
 ## Code Quality / React Best Practices
 
 ### 7) Styling concerns mixed into component logic
