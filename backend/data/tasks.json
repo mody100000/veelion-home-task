@@ -23,8 +23,8 @@
   {
     "id": "9c9d06f8-1d27-4b13-bc31-89460519bb83",
     "title": "test",
-    "completed": false,
+    "completed": true,
     "createdAt": "2026-10-13T23:46:39.573Z",
-    "updatedAt": "2026-10-13T23:46:39.573Z"
+    "updatedAt": "2026-10-14T00:26:34.721Z"
   }
 ]

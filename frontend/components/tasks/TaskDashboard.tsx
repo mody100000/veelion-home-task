@@ -87,12 +87,15 @@ export function TaskDashboard() {
 
   const isModalOpen = isCreateModalOpen || editingTask !== undefined;
 
-  const totalPages = Math.max(1, Math.ceil(filteredTasks.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredTasks.length / ITEMS_PER_PAGE),
+  );
   const safePage = Math.min(currentPage, totalPages);
 
   const paginatedTasks = filteredTasks.slice(
     (safePage - 1) * ITEMS_PER_PAGE,
-    safePage * ITEMS_PER_PAGE
+    safePage * ITEMS_PER_PAGE,
   );
 
   return (
