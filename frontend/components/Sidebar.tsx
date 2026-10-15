@@ -3,7 +3,7 @@
 import { useState } from "react";
 import {
   Activity,
-  LayoutDashboard,
+  Home,
   ListTodo,
   Menu,
   X,
@@ -11,9 +11,8 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { CURRENT_USER, CURRENT_TEAM } from "@/lib/constants";
-import { getStringInitial } from "@/utils/string";
 import Image from "next/image";
-import { Badge } from "./common/Badges";
+import { ItemInfo } from "./common/ItemInfo";
 
 type SidebarItem = {
   name: string;
@@ -22,7 +21,7 @@ type SidebarItem = {
 };
 
 const SIDEBAR_ITEMS: SidebarItem[] = [
-  { name: "Home", href: "/", icon: LayoutDashboard },
+  { name: "Home", href: "/", icon: Home },
   { name: "Tasks", href: "/tasks", icon: ListTodo },
   { name: "Activity", href: "/activity", icon: Activity },
 ];
@@ -31,9 +30,6 @@ export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-
-  const firstLetter = getStringInitial(CURRENT_USER.name);
-  const teamLetter = getStringInitial(CURRENT_TEAM.name);
 
   const isActive = (route: string) => {
     if (route === "/") {
@@ -109,18 +105,13 @@ export default function Sidebar() {
       </div>
 
       {/* User button */}
-      <button
-        type="button"
-        className="mt-auto flex w-full items-center gap-3 border-t border-[#E4E4E7] bg-white px-4 py-3 text-left transition hover:bg-zinc-50"
-      >
-        <Badge letter={firstLetter} variant="user" />
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-zinc-900">
-            {CURRENT_USER.name}
-          </p>
-          <p className="truncate text-xs text-zinc-500">{CURRENT_USER.email}</p>
-        </div>
-      </button>
+      <div className="mt-auto border-t border-[#E4E4E7]">
+        <ItemInfo
+          badge={{ variant: "user" }}
+          title={CURRENT_USER.name}
+          subtitle={CURRENT_USER.email}
+        />
+      </div>
     </>
   );
 

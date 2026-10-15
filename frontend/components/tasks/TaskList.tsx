@@ -3,11 +3,19 @@ import { TaskItem } from "@/components/tasks/TaskItem";
 
 type TaskListProps = {
   tasks: Task[];
-  updatingTaskId: string;
+  mutatingTaskId?: string;
   onToggle: (task: Task) => void;
+  onEdit: (task: Task) => void;
+  onDelete: (taskId: string) => void;
 };
 
-export function TaskList({ tasks, updatingTaskId, onToggle }: TaskListProps) {
+export function TaskList({
+  tasks,
+  mutatingTaskId,
+  onToggle,
+  onEdit,
+  onDelete,
+}: TaskListProps) {
   if (tasks.length === 0) {
     return (
       <section className="rounded-xl border border-border bg-surface p-4">
@@ -23,8 +31,10 @@ export function TaskList({ tasks, updatingTaskId, onToggle }: TaskListProps) {
           <TaskItem
             key={task.id}
             task={task}
-            busy={updatingTaskId === task.id}
+            busy={mutatingTaskId === task.id}
             onToggle={onToggle}
+            onEdit={onEdit}
+            onDelete={onDelete}
           />
         ))}
       </ul>

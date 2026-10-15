@@ -7,8 +7,8 @@ type StatusBadgeProps = {
   textClass: string;
 };
 
-type BadgeProps = {
-  letter: string;
+export type BadgeProps = {
+  letter?: string;
   variant?: "user" | "task" | "team" | "muted";
   color?: string;
   size?: "sm" | "md" | "lg";
@@ -16,7 +16,7 @@ type BadgeProps = {
 };
 
 export function Badge({
-  letter,
+  letter = "",
   variant = "user",
   color,
   size = "md",
@@ -29,7 +29,7 @@ export function Badge({
   };
 
   const userBgColor =
-    color ?? LETTER_COLORS[letter[0].toUpperCase()] ?? "#3B82F6";
+    color ?? LETTER_COLORS[letter[0]?.toUpperCase()] ?? "#3B82F6";
 
   const variantClasses = {
     user: "rounded-full text-white font-medium",

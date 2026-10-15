@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ToastContainer } from "react-toastify";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import Breadcrumb from "@/components/common/Breadcrumb";
@@ -23,6 +24,12 @@ export default function RootLayout({
             <main className="flex-1 overflow-y-auto">{children}</main>
           </div>
         </div>
+        <ToastContainer
+          autoClose={3000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+        />
       </body>
     </html>
   );

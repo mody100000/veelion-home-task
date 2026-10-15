@@ -28,15 +28,21 @@
 - **Why it matters:** Visual inconsistency and high risk of drift when adding new pages (like `/reports`).
 - **improvement:** Define design system tokens (palette, typography, spacing) and reuse through global CSS variables and constants.
 
+### 5) Duplicate backend request logic in frontend API client
+
+- **What is wrong:** `frontend/lib/backendApi.ts` repeated fetch/error handling in each function and lacked a request timeout and response-shape guards.
+- **Why it matters:** Duplication increases bug risk, and absent timeout/validation can lead to hanging requests or brittle runtime failures when backend payloads drift.
+- **improvement:** Added a shared request helper with timeout handling, centralized error parsing, and response-shape validation while preserving existing endpoint contracts.
+
 ## UX Issues
 
-### 5) Error and loading states were visually inconsistent
+### 6) Error and loading states were visually inconsistent
 
 - **What is wrong:** Different sections had ad-hoc spacing and text hierarchy.
 - **Why it matters:** Inconsistent UI feedback reduces trust and readability.
 - **improvement:** Use consistent card, button, and muted text patterns with shared classes.
 
-### 6) Sidebar and breadcrumb improve navigation flow
+### 7) Sidebar and breadcrumb improve navigation flow
 
 - **What is improved:** Clear navigation improves user experience by providing context and reducing friction when navigating across different sections of the app.
 - **Why it matters:** The application lacked a consistent navigation structure, making it harder for users to understand their current location and move between pages with the basic back button.
@@ -44,8 +50,23 @@
 
 ## Code Quality / React Best Practices
 
-### 7) Styling concerns mixed into component logic
+### 8) Styling concerns mixed into component logic
 
 - **What is wrong:** Layout details were embedded directly in JSX inline style objects.
 - **Why it matters:** Blurs logic/presentation boundaries and complicates component reuse.
 - **improvement:** Keep components focused on behavior/state while using shared style primitives.
+
+### 9) `useTasks` hook complexity and error-path behavior
+
+- **What is wrong:** `frontend/hooks/useTasks.ts` contained unnecessary guard complexity and request handling details that made the hook harder to follow, plus unconditional JSON headers and brittle non-JSON error parsing.
+- **Why it matters:** Extra complexity increases maintenance cost and makes debugging async flows slower.
+- **improvement:** Simplified to a single fetch abort ref, kept loading/error state handling straightforward, switched sentinel state to `null`, made `Content-Type` conditional on request body, and improved non-JSON error fallback messaging.
+
+## Task Page
+
+We significantly upgraded the Task Dashboard's functionality and UX with the following core features:
+
+- **Task Stats Cards**: Added real-time summary cards displaying Total, Pending, and Completed task counts.
+- **Frontend Search & Pagination**: Implemented client-side search filtering and a reusable pagination component (triggered when exceeding 5 items per page).
+- **Full CRUD Capabilities**: Added a unified modal for creating tasks and editing titles, along with a confirmation modal for safe deletions.
+- **Overall UX Polish**: Replaced native browser alerts with custom modals, added `react-toastify` for toast notifications, and introduced a `LoadingSkeleton` for smooth data-fetching state transitions.

@@ -21,6 +21,16 @@ export type TaskResponse = {
   data: Task;
 };
 
+export type CreateTaskRequest = {
+  title: string;
+  completed?: boolean;
+};
+
+export type UpdateTaskRequest = {
+  title?: string;
+  completed?: boolean;
+};
+
 export type ErrorResponse = {
   error?: {
     message?: string;

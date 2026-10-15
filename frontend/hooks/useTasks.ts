@@ -1,7 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ErrorResponse, Task, TaskFilter, TaskResponse, TasksResponse } from "@/types/api";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type {
+  ErrorResponse,
+  Task,
+  TaskFilter,
+  TaskResponse,
+  TasksResponse,
+} from "@/types/api";
 
 function getErrorMessage(error: unknown, fallback: string): string {
   if (error instanceof Error) {
@@ -12,21 +18,29 @@ function getErrorMessage(error: unknown, fallback: string): string {
 }
 
 async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
+  const hasBody = init?.body !== undefined;
+
   const response = await fetch(url, {
     ...init,
     headers: {
-      "Content-Type": "application/json",
+      ...(hasBody ? { "Content-Type": "application/json" } : {}),
       ...(init?.headers || {}),
     },
   });
 
   if (!response.ok) {
+    let message = `Request failed with ${response.status}`;
+
     try {
       const body = (await response.json()) as ErrorResponse;
-      throw new Error(body.error?.message || `Request failed with ${response.status}`);
-    } catch (error) {
-      throw new Error(getErrorMessage(error, `Request failed with ${response.status}`));
-    }
+      message = body.error?.message || message;
+    } catch {}
+
+    throw new Error(message);
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   return (await response.json()) as T;
@@ -35,72 +49,201 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState<TaskFilter>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-  const [updatingTaskId, setUpdatingTaskId] = useState<string>("");
+  const [creating, setCreating] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>();
+  const [mutatingTaskId, setMutatingTaskId] = useState<string | undefined>();
+  const fetchAbortRef = useRef<AbortController | undefined>(undefined);
+
+  useEffect(() => {
+    return () => {
+      fetchAbortRef.current?.abort();
+    };
+  }, []);
 
   const fetchTasks = useCallback(async () => {
+    fetchAbortRef.current?.abort();
+
+    const controller = new AbortController();
+    fetchAbortRef.current = controller;
+
     try {
       setLoading(true);
-      setError("");
+      setError(undefined);
 
       const body = await requestJson<TasksResponse>("/api/tasks", {
-        method: "GET",
+        signal: controller.signal,
       });
 
       setTasks(body.data);
     } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        return;
+      }
+
       setError(getErrorMessage(error, "Could not load tasks right now."));
     } finally {
+      if (controller.signal.aborted) {
+        return;
+      }
+
       setLoading(false);
     }
   }, []);
 
-  const updateTaskStatus = useCallback(async (taskId: string, completed: boolean) => {
-    try {
-      setUpdatingTaskId(taskId);
-      setError("");
+  const updateTaskStatus = useCallback(
+    async (taskId: string, completed: boolean) => {
+      if (mutatingTaskId) {
+        return false;
+      }
 
-      const body = await requestJson<TaskResponse>(`/api/tasks/${taskId}`, {
-        method: "PATCH",
-        body: JSON.stringify({ completed }),
-      });
+      try {
+        setMutatingTaskId(taskId);
+        setError(undefined);
 
-      setTasks((previous) =>
-        previous.map((task) => (task.id === taskId ? body.data : task))
-      );
-    } catch (error) {
-      setError(getErrorMessage(error, "Could not update task status."));
-    } finally {
-      setUpdatingTaskId("");
-    }
-  }, []);
+        const body = await requestJson<TaskResponse>(`/api/tasks/${taskId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ completed }),
+        });
+
+        setTasks((previous) =>
+          previous.map((task) => (task.id === taskId ? body.data : task)),
+        );
+        return true;
+      } catch (error) {
+        setError(getErrorMessage(error, "Could not update task status."));
+        return false;
+      } finally {
+        setMutatingTaskId(undefined);
+      }
+    },
+    [mutatingTaskId],
+  );
+
+  const createTask = useCallback(
+    async (title: string) => {
+      if (creating) {
+        return false;
+      }
+
+      try {
+        setCreating(true);
+        setError(undefined);
+
+        const body = await requestJson<TaskResponse>("/api/tasks", {
+          method: "POST",
+          body: JSON.stringify({ title }),
+        });
+
+        setTasks((previous) => [body.data, ...previous]);
+        return true;
+      } catch (error) {
+        setError(getErrorMessage(error, "Could not create task."));
+        return false;
+      } finally {
+        setCreating(false);
+      }
+    },
+    [creating],
+  );
+
+  const editTaskTitle = useCallback(
+    async (taskId: string, title: string) => {
+      if (mutatingTaskId) {
+        return false;
+      }
+
+      try {
+        setMutatingTaskId(taskId);
+        setError(undefined);
+
+        const body = await requestJson<TaskResponse>(`/api/tasks/${taskId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ title }),
+        });
+
+        setTasks((previous) =>
+          previous.map((task) => (task.id === taskId ? body.data : task)),
+        );
+        return true;
+      } catch (error) {
+        setError(getErrorMessage(error, "Could not edit task."));
+        return false;
+      } finally {
+        setMutatingTaskId(undefined);
+      }
+    },
+    [mutatingTaskId],
+  );
+
+  const deleteTask = useCallback(
+    async (taskId: string) => {
+      if (mutatingTaskId) {
+        return false;
+      }
+
+      try {
+        setMutatingTaskId(taskId);
+        setError(undefined);
+
+        await requestJson<undefined>(`/api/tasks/${taskId}`, {
+          method: "DELETE",
+        });
+
+        setTasks((previous) => previous.filter((task) => task.id !== taskId));
+        return true;
+      } catch (error) {
+        setError(getErrorMessage(error, "Could not delete task."));
+        return false;
+      } finally {
+        setMutatingTaskId(undefined);
+      }
+    },
+    [mutatingTaskId],
+  );
 
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
 
   const filteredTasks = useMemo(() => {
+    const normalizedSearch = searchQuery.trim().toLowerCase();
+
+    let result = tasks;
+
     if (filter === "completed") {
-      return tasks.filter((task) => task.completed);
+      result = tasks.filter((task) => task.completed);
+    } else if (filter === "pending") {
+      result = tasks.filter((task) => !task.completed);
     }
 
-    if (filter === "pending") {
-      return tasks.filter((task) => !task.completed);
-    }
+    result = result.filter((task) =>
+      task.title.toLowerCase().includes(normalizedSearch),
+    );
 
-    return tasks;
-  }, [tasks, filter]);
+    // Sort tasks by newest first
+    return [...result].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+  }, [tasks, filter, searchQuery]);
 
   return {
     tasks,
     filteredTasks,
     filter,
+    searchQuery,
     loading,
+    creating,
     error,
-    updatingTaskId,
+    mutatingTaskId,
     setFilter,
+    setSearchQuery,
     fetchTasks,
+    createTask,
+    editTaskTitle,
+    deleteTask,
     updateTaskStatus,
   };
 }
