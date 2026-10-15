@@ -1,12 +1,30 @@
 import { BACKEND_BASE_URL } from "@/lib/constants";
-import type { ActivityLog, ErrorResponse, Task, TaskResponse, TasksResponse } from "@/types/api";
+import type {
+  ActivityLog,
+  CreateTaskRequest,
+  ErrorResponse,
+  Task,
+  TaskResponse,
+  TasksResponse,
+  UpdateTaskRequest,
+} from "@/types/api";
+
+const REQUEST_TIMEOUT_MS = 8_000;
+
+type ApiEnvelope<T> = {
+  data: T;
+};
 
 function buildBackendUrl(path: string): string {
   return `${BACKEND_BASE_URL}${path}`;
 }
 
+function withTimeoutSignal(timeoutMs: number): AbortSignal {
+  return AbortSignal.timeout(timeoutMs);
+}
+
 async function parseError(response: Response): Promise<string> {
-  let fallback = `Request failed with status ${response.status}`;
+  const fallback = `Request failed with status ${response.status}`;
 
   try {
     const body = (await response.json()) as ErrorResponse;
@@ -16,57 +34,130 @@ async function parseError(response: Response): Promise<string> {
   }
 }
 
-export async function getTasksFromBackend(): Promise<Task[]> {
+function isApiEnvelope<T>(value: unknown): value is ApiEnvelope<T> {
+  return Boolean(value && typeof value === "object" && "data" in value);
+}
+
+async function requestBackendJson<T>(
+  path: string,
+  init?: RequestInit,
+): Promise<T> {
+  const timeoutSignal = withTimeoutSignal(REQUEST_TIMEOUT_MS);
+
   try {
-    const response = await fetch(buildBackendUrl("/tasks"), {
+    const response = await fetch(buildBackendUrl(path), {
       cache: "no-store",
+      ...init,
+      signal: timeoutSignal,
     });
 
     if (!response.ok) {
       throw new Error(await parseError(response));
     }
 
-    const body = (await response.json()) as TasksResponse;
-    return body.data;
+    return (await response.json()) as T;
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : "Failed to load tasks.");
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(`Request timed out after ${REQUEST_TIMEOUT_MS}ms.`);
+    }
+
+    throw new Error(
+      error instanceof Error ? error.message : "Backend request failed.",
+    );
   }
 }
 
-export async function updateTaskInBackend(taskId: string, completed: boolean): Promise<Task> {
+async function requestBackend(path: string, init?: RequestInit): Promise<void> {
+  const timeoutSignal = withTimeoutSignal(REQUEST_TIMEOUT_MS);
+
   try {
-    const response = await fetch(buildBackendUrl(`/tasks/${taskId}`), {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ completed }),
+    const response = await fetch(buildBackendUrl(path), {
       cache: "no-store",
+      ...init,
+      signal: timeoutSignal,
     });
 
     if (!response.ok) {
       throw new Error(await parseError(response));
     }
-
-    const body = (await response.json()) as TaskResponse;
-    return body.data;
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : "Failed to update task.");
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(`Request timed out after ${REQUEST_TIMEOUT_MS}ms.`);
+    }
+
+    throw new Error(
+      error instanceof Error ? error.message : "Backend request failed.",
+    );
   }
+}
+
+export async function getTasksFromBackend(): Promise<Task[]> {
+  const body = await requestBackendJson<TasksResponse>("/tasks");
+
+  if (!isApiEnvelope<Task[]>(body) || !Array.isArray(body.data)) {
+    throw new Error("Invalid tasks response shape from backend.");
+  }
+
+  return body.data;
+}
+
+export async function updateTaskInBackend(
+  taskId: string,
+  updates: UpdateTaskRequest,
+): Promise<Task> {
+  const body = await requestBackendJson<TaskResponse>(`/tasks/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updates),
+  });
+
+  if (
+    !isApiEnvelope<Task>(body) ||
+    !body.data ||
+    typeof body.data !== "object"
+  ) {
+    throw new Error("Invalid task response shape from backend.");
+  }
+
+  return body.data;
+}
+
+export async function createTaskInBackend(
+  payload: CreateTaskRequest,
+): Promise<Task> {
+  const body = await requestBackendJson<TaskResponse>("/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (
+    !isApiEnvelope<Task>(body) ||
+    !body.data ||
+    typeof body.data !== "object"
+  ) {
+    throw new Error("Invalid task response shape from backend.");
+  }
+
+  return body.data;
+}
+
+export async function deleteTaskInBackend(taskId: string): Promise<void> {
+  await requestBackend(`/tasks/${taskId}`, {
+    method: "DELETE",
+  });
 }
 
 export async function getActivityFromBackend(): Promise<ActivityLog[]> {
-  try {
-    const response = await fetch(buildBackendUrl("/activity"), {
-      cache: "no-store",
-    });
+  const body = await requestBackendJson<ActivityLog[]>("/activity");
 
-    if (!response.ok) {
-      throw new Error(await parseError(response));
-    }
-
-    return (await response.json()) as ActivityLog[];
-  } catch (error) {
-    throw new Error(error instanceof Error ? error.message : "Failed to load activity logs.");
+  if (!Array.isArray(body)) {
+    throw new Error("Invalid activity response shape from backend.");
   }
+
+  return body;
 }
