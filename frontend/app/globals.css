@@ -1,5 +1,26 @@
 @import "tailwindcss";
-@config "../tailwind.config.js";
+
+@theme {
+  --color-primary: #0f766e;
+  --color-primary-50: #f0fdfa;
+  --color-primary-100: #ccfbf1;
+  --color-primary-200: #99f6e4;
+  --color-primary-300: #5eead4;
+  --color-primary-400: #2dd4bf;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #0d9488;
+  --color-primary-700: #0f766e;
+  --color-primary-800: #115e59;
+  --color-primary-900: #134e4a;
+  --color-secondary: #334155;
+  --color-success: #15803d;
+  --color-danger: #b91c1c;
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-text: #0f172a;
+  --color-muted: #475569;
+  --color-border: #cbd5e1;
+}
 
 * {
   box-sizing: border-box;
@@ -13,7 +34,11 @@ body {
 }
 
 body {
-  background: radial-gradient(circle at top right, #e5f3ff, #f8fafc 55%);
+  background: radial-gradient(
+    circle at top right,
+    var(--color-primary-50),
+    var(--color-background) 55%
+  );
   font-family:
     Inter,
     ui-sans-serif,

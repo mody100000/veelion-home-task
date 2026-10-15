@@ -1,2 +1,41 @@
 export const BACKEND_BASE_URL =
   process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:4000";
+
+export const CURRENT_USER = {
+  name: "Mahmoud Gomaa",
+  email: "gomaa@gmail.com",
+};
+
+export const CURRENT_TEAM = {
+  name: "VeeLion",
+  email: "Engineering Team",
+};
+
+export const LETTER_COLORS: Record<string, string> = {
+  A: "#F87171",
+  B: "#FB923C",
+  C: "#FBBF24",
+  D: "#A3E635",
+  E: "#34D399",
+  F: "#22D3EE",
+  G: "#60A5FA",
+  H: "#818CF8",
+  I: "#A78BFA",
+  J: "#E879F9",
+  K: "#F43F5E",
+  L: "#FB7185",
+  M: "#F97316",
+  N: "#EAB308",
+  O: "#10B981",
+  P: "#06B6D4",
+  Q: "#3B82F6",
+  R: "#6366F1",
+  S: "#8B5CF6",
+  T: "#D946EF",
+  U: "#EC4899",
+  V: "#14B8A6",
+  W: "#84CC16",
+  X: "#F59E0B",
+  Y: "#EF4444",
+  Z: "#7C3AED",
+};
