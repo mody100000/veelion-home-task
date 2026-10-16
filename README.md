@@ -2,165 +2,80 @@
 
 ## Overview
 
-You are given a partially implemented frontend for a **Task Management System** built with Next.js.
+This project is a **Task Management App** built with **Next.js (App Router)** and **TypeScript**.
+It includes three main pages:
 
-The project contains **two modules**:
+- **Tasks**: Manage tasks with create, edit, delete, search, and pagination.
+- **Activity**: View activity logs with filters, search, and stats.
+- **Reports**: See summary statistics and task status insights.
 
-* A **Task Dashboard**
-* An **Activity Feed**
+The frontend uses API route handlers under `app/api/*` to proxy requests to the backend.
 
-Your goal is to:
+## Screenshots
 
-1. Review the existing implementation
-2. Identify good and bad practices
-3. Improve the problematic module
-4. Build a new feature that integrates with the system
+## Folder Structure
 
----
-
-## Objectives
-
-This assessment evaluates your ability to:
-
-* Understand existing React/Next.js code
-* Identify code quality issues
-* Refactor UI code effectively
-* Build maintainable components
-* Integrate with APIs
-
----
-
-## What You Are Given
-
-* Next.js (App Router) project
-* Two modules/pages:
-
-  * Task Dashboard
-  * Activity Feed
-
----
-
-## Your Tasks
-
-### 1. Code Review
-
-Create a file named:
-
-```
-REVIEW.md
+```bash
+frontend/
+├── app/
+│   ├── activity/
+│   ├── reports/
+│   ├── tasks/
+│   └── api/
+├── components/
+│   ├── activity/
+│   ├── reports/
+│   ├── tasks/
+│   └── common/
+├── hooks/
+├── lib/
+├── public/
+├── types/
+├── utils/
+├── globals.css
+├── next.config.mjs
+├── postcss.config.mjs
+├── tsconfig.json
+└── package.json
 ```
 
-Include:
+## Tech Stack
 
-* All the findings / issues you may want to discuss
-* Categorize issues such as:
+### Core
 
-  * Performance
-  * Maintainability
-  * UX issues
-  * Code quality
-  * React best practices
+- **Next.js** `14.2.5`
+- **React** `18.2.0`
+- **TypeScript** `5.5.4`
 
-For each issue:
+### UI & Styling
 
-* What is wrong
-* Why it matters
-* Suggested improvement
+- **Tailwind CSS**
+- **lucide-react**
+- **react-toastify**
 
----
+## Installation & Run
 
-### 2. Refactor Both Modules
+### 1) Install frontend dependencies
 
-Improve the existing modules
-
-**Important**:
-
-* Don't rewrite everything from scratch
-* Maintain existing functionality
-
----
-
-
-### 3. Build a New Module (Reports UI)
-
-Create a new page:
-
-```
-/reports
+```bash
+cd frontend
+npm install
 ```
 
-### Requirements:
+### 2) Configure environment
 
-Display:
+Create/update `.env` in `frontend/` based on `.env.example`.
 
-* Total number of tasks
-* Tasks grouped by status
-* Recent activity count
+### 3) Run development server
 
-### Expectations:
+```bash
+npm run dev
+```
 
-* Fetch data from the Reports API
-* Use clean component structure
-* Handle loading and error states
-* Keep UI simple but clear
+Open: `http://localhost:3000`
 
----
+## Notes
 
-## Constraints
-
-* Keep components reusable and clean
-* Assume this is part of a real production app
-
----
-
-### 4. Improve the current UI
-
-Improve the existing UI, it currently uses basic CSS styling.
-Use your eye and style the pages beautifully.
-
-
----
-
-## Submission Instructions
-
-1. Create a **public GitHub repository**
-
-2. Push your solution
-
-3. Include:
-
-   * Updated code
-   * `REVIEW.md`
-   * Clean commit history
-
-4. Share the repository link
-
----
-
-## ⏱Time Expectation
-
-* Expected time: **~2 days**
-
----
-
-## AI Usage
-
-You are allowed to use AI tools, but not copy-pasting this document and just pushing the output.
-
-We are evaluating:
-
-* How you reason about code
-* Your ability to identify issues
-* Your improvements, not just generated code
-
----
-
-
-
-
-## Project Notes
-
-- The frontend uses Next.js App Router with TypeScript.
-- Route handlers under `app/api/*` proxy requests to backend.
-- Backend endpoint docs are in `docs/backend-endpoints.md`.
-- Backend installation notes are in `/backend/README.md`.
+- Backend endpoint reference: `frontend/docs/backend-endpoints.md`
+- Backend setup notes: `backend/README.md`
+- Code review findings: `REVIEW.md`
