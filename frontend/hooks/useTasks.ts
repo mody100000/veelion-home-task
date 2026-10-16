@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { invalidateReportsCache } from "@/hooks/useReports";
 import type {
   ErrorResponse,
   Task,
@@ -114,7 +115,9 @@ export function useTasks() {
             action: "status_changed",
             info: `Task marked as ${completed ? "completed" : "pending"}`,
           }),
-        }).catch((err) => console.error("Failed to log activity:", err));
+        })
+          .then(() => invalidateReportsCache())
+          .catch((err) => console.error("Failed to log activity:", err));
 
         setTasks((previous) =>
           previous.map((task) => (task.id === taskId ? body.data : task)),
@@ -152,7 +155,9 @@ export function useTasks() {
             action: "created",
             info: `New task created`,
           }),
-        }).catch((err) => console.error("Failed to log activity:", err));
+        })
+          .then(() => invalidateReportsCache())
+          .catch((err) => console.error("Failed to log activity:", err));
 
         setTasks((previous) => [body.data, ...previous]);
         return true;
@@ -188,7 +193,9 @@ export function useTasks() {
             action: "updated",
             info: `Task updated`,
           }),
-        }).catch((err) => console.error("Failed to log activity:", err));
+        })
+          .then(() => invalidateReportsCache())
+          .catch((err) => console.error("Failed to log activity:", err));
 
         setTasks((previous) =>
           previous.map((task) => (task.id === taskId ? body.data : task)),
@@ -225,7 +232,9 @@ export function useTasks() {
             action: "deleted",
             info: `Task deleted`,
           }),
-        }).catch((err) => console.error("Failed to log activity:", err));
+        })
+          .then(() => invalidateReportsCache())
+          .catch((err) => console.error("Failed to log activity:", err));
 
         setTasks((previous) => previous.filter((task) => task.id !== taskId));
         return true;

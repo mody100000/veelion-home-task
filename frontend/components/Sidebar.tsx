@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import {
+  FileText,
   Activity,
   Home,
   ListTodo,
@@ -24,6 +25,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { name: "Home", href: "/", icon: Home },
   { name: "Tasks", href: "/tasks", icon: ListTodo },
   { name: "Activity", href: "/activity", icon: Activity },
+  { name: "Reports", href: "/reports", icon: FileText },
 ];
 
 export default function Sidebar() {
@@ -74,7 +76,7 @@ export default function Sidebar() {
             <p className="px-2 text-[10px] font-bold uppercase text-[#A1A1AA]">
               General
             </p>
-            <ul className="space-y-1">
+            <ul className="space-y-1.5">
               {SIDEBAR_ITEMS.map((item) => {
                 const Icon = item.icon;
 
@@ -86,14 +88,14 @@ export default function Sidebar() {
                         setOpen(false);
                         router.push(item.href);
                       }}
-                      className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm font-medium transition-colors
+                      className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors cursor-pointer
                         ${
                           isActive(item.href)
                             ? "bg-primary text-white hover:bg-primary-600"
                             : "text-zinc-700 hover:bg-primary-100 hover:text-primary-700"
                         }`}
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon className="h-6 w-6" />
                       <span>{item.name}</span>
                     </button>
                   </li>

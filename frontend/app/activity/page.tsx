@@ -1,4 +1,4 @@
-import { ActivityClient } from "@/components/activity/ActivityClient";
+import { ActivityDashboard } from "@/components/activity/ActivityDashboard";
 
 export default function ActivityPage() {
   return (
@@ -10,7 +10,7 @@ export default function ActivityPage() {
         </p>
       </div>
 
-      <ActivityClient />
+      <ActivityDashboard />
     </main>
   );
 }

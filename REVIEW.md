@@ -78,3 +78,11 @@ We enhanced the Activity Log's functionality and UX with the following core feat
 - **Activity Stats Cards**: Added visual summary cards displaying total actions alongside specific counts for creations, updates, and deletions.
 - **Search, Filters, & Pagination**: Integrated text search, action-specific dropdown filtering, and our reusable `usePagination` hook to navigate large logs effortlessly.
 - **Refactored Logic & UI Polish**: Simplified the activity logging messages in the tasks context, refactored the Activity page to leverage a clean Server Component/Client Component architecture, and delivered a consistent, polished look and feel.
+
+## Reports Page
+
+We built a new Reports page to bring all our app's statistics together in one place. Key features include:
+
+- **Reports Dashboard**: The new page displays stats cards for total tasks, recent activity, completed tasks, and pending tasks. Below that, it features a Pie Chart providing a clear visual breakdown of completed vs. pending tasks.
+- **One Source of Truth**: Instead of having separate stat calculations on every page, the Tasks, Activity, and Reports pages now all share the exact same data from the `/api/reports` endpoint using a reusable `StatsCard` component.
+- **Smart Real-Time Updates**: We built a smart caching system so whenever you create, update, or delete a task on any page, the app automatically refetches the newest stats in the background. This instantly updates the numbers across all pages in real-time without needing a page refresh!
