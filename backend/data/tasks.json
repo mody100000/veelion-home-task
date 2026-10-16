@@ -1,23 +1,65 @@
 [
   {
-    "id": "aaf65dbe-7dda-4dfd-ad8c-f77b9915e0ba",
-    "title": "test",
-    "completed": true,
-    "createdAt": "2026-10-14T01:38:31.809Z",
-    "updatedAt": "2026-10-14T01:38:49.374Z"
-  },
-  {
-    "id": "1eef993e-a40c-4ae8-bac2-bcf4200aaa2d",
-    "title": "test",
+    "id": "1ea01d21-0ce7-441c-a2bd-de60be19c5d7",
+    "title": "Configure Waybar styling with CSS",
     "completed": false,
-    "createdAt": "2026-10-14T03:33:28.127Z",
-    "updatedAt": "2026-10-14T03:33:28.127Z"
+    "createdAt": "2026-10-15T15:54:37.969Z",
+    "updatedAt": "2026-10-15T15:59:26.296Z"
   },
   {
-    "id": "198afa03-7dbe-4e74-b443-919e8910c49b",
-    "title": "holla",
+    "id": "9e212079-818f-48f2-b410-5631f8d1bb6f",
+    "title": "Optimize Next.js middleware",
+    "completed": false,
+    "createdAt": "2026-10-15T15:54:50.345Z",
+    "updatedAt": "2026-10-15T15:54:50.345Z"
+  },
+  {
+    "id": "83ddd9fe-4176-4f96-a956-6cecb7fb725a",
+    "title": "Automate pacman cache cleanup",
     "completed": true,
-    "createdAt": "2026-10-14T22:51:15.376Z",
-    "updatedAt": "2026-10-14T22:51:36.223Z"
+    "createdAt": "2026-10-15T15:56:03.587Z",
+    "updatedAt": "2026-10-15T16:02:34.967Z"
+  },
+  {
+    "id": "c170abb1-b3e6-49e6-a30a-461fdb82123f",
+    "title": "Update system and AUR package",
+    "completed": true,
+    "createdAt": "2026-10-15T15:59:46.064Z",
+    "updatedAt": "2026-10-15T16:02:22.950Z"
+  },
+  {
+    "id": "c16ba495-c1bb-4da3-81fa-7057f6b91931",
+    "title": "Generate a snapshot of dotfiles",
+    "completed": false,
+    "createdAt": "2026-10-15T15:59:58.034Z",
+    "updatedAt": "2026-10-15T15:59:58.034Z"
+  },
+  {
+    "id": "851fa274-a2b1-4156-b4a2-17562ff355ac",
+    "title": "valuate Alacritty vs Kitty",
+    "completed": true,
+    "createdAt": "2026-10-15T16:00:17.000Z",
+    "updatedAt": "2026-10-15T16:02:20.803Z"
+  },
+  {
+    "id": "ff51996d-280e-4959-9c71-1b9813efd680",
+    "title": "Install missing Fonts",
+    "completed": true,
+    "createdAt": "2026-10-15T16:01:42.936Z",
+    "updatedAt": "2026-10-15T16:02:46.158Z"
+  },
+  {
+    "id": "30acd300-5e95-4b3a-9bea-a54cb3832936",
+    "title": "Fetch the latest pacman mirrorlist",
+    "completed": false,
+    "createdAt": "2026-10-15T16:02:05.449Z",
+    "updatedAt": "2026-10-15T16:02:05.449Z"
+  },
+  {
+    "id": "22e95328-ce32-46ed-81a4-0aa161230d60",
+    "title": "Patch the NVIDIA drivers via DKMS",
+    "completed": true,
+    "createdAt": "2026-10-15T16:04:25.229Z",
+    "updatedAt": "2026-10-15T16:04:31.621Z"
   }
 ]
