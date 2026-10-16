@@ -10,5 +10,59 @@
     "action": "status_changed",
     "info": "Task marked as completed",
     "when": "2026-10-14T01:38:49.383Z"
+  },
+  {
+    "id": "1776137608207",
+    "action": "created",
+    "info": "New task created",
+    "when": "2026-10-14T03:33:28.207Z"
+  },
+  {
+    "id": "1776207075385",
+    "action": "created",
+    "info": "New task created",
+    "when": "2026-10-14T22:51:15.385Z"
+  },
+  {
+    "id": "1776207096234",
+    "action": "status_changed",
+    "info": "Task marked as completed",
+    "when": "2026-10-14T22:51:36.234Z"
+  },
+  {
+    "id": "1776207113567",
+    "action": "created",
+    "info": "New task created",
+    "when": "2026-10-14T22:51:53.567Z"
+  },
+  {
+    "id": "1776207134696",
+    "action": "deleted",
+    "info": "Task deleted",
+    "when": "2026-10-14T22:52:14.696Z"
+  },
+  {
+    "id": "1776207361586",
+    "action": "created",
+    "info": "New task created",
+    "when": "2026-10-14T22:56:01.586Z"
+  },
+  {
+    "id": "1776207369536",
+    "action": "deleted",
+    "info": "Task deleted",
+    "when": "2026-10-14T22:56:09.536Z"
+  },
+  {
+    "id": "1776207384269",
+    "action": "created",
+    "info": "New task created",
+    "when": "2026-10-14T22:56:24.269Z"
+  },
+  {
+    "id": "1776209269244",
+    "action": "deleted",
+    "info": "Task deleted",
+    "when": "2026-10-14T23:27:49.244Z"
   }
 ]

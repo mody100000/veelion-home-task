@@ -12,7 +12,7 @@ import { usePagination } from "@/hooks/usePagination";
 
 const ITEMS_PER_PAGE = 10;
 
-export function ActivityClient() {
+export function ActivityDashboard() {
   const {
     activities,
     filteredActivities,

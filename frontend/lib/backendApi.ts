@@ -7,6 +7,7 @@ import type {
   TaskResponse,
   TasksResponse,
   UpdateTaskRequest,
+  ReportsSummaryResponse,
 } from "@/types/api";
 
 const REQUEST_TIMEOUT_MS = 8_000;
@@ -174,5 +175,12 @@ export async function createActivityInBackend(payload: {
     body: JSON.stringify(payload),
   });
 
+  return body;
+}
+
+export async function getReportsSummaryFromBackend(): Promise<ReportsSummaryResponse> {
+  const body = await requestBackendJson<ReportsSummaryResponse>(
+    "/reports/tasks-summary",
+  );
   return body;
 }
