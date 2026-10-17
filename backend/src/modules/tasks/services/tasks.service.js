@@ -1,10 +1,7 @@
-const path = require('node:path');
-
+const { TASKS_FILE_PATH } = require('../../../config/paths');
 const { createId } = require('../../../utils/id');
-const { readJsonArray, writeJsonArray } = require('../../../utils/jsonStore');
+const { readJsonArray, mutateJsonArray } = require('../../../utils/jsonStore');
 const HttpError = require('../../../utils/httpError');
-
-const TASKS_FILE_PATH = path.join(process.cwd(), 'data', 'tasks.json');
 
 function buildTaskRecord(payload) {
   const now = new Date().toISOString();
@@ -12,7 +9,7 @@ function buildTaskRecord(payload) {
   return {
     id: createId(),
     title: payload.title,
-    completed: payload.completed,
+    completed: Boolean(payload.completed),
     createdAt: now,
     updatedAt: now,
   };
@@ -34,66 +31,53 @@ async function getTaskById(taskId) {
 }
 
 async function createTask(payload) {
-  if (!payload.title || typeof payload.title !== 'string') {
+  if (!payload || !payload.title || typeof payload.title !== 'string') {
     throw new HttpError(400, 'Invalid title.');
   }
 
-  if (payload.completed !== undefined && typeof payload.completed !== 'boolean') {
-    throw new HttpError(400, 'Invalid completed value.');
-  }
-
-  if (payload.completed === undefined) {
-    payload.completed = false;
-  }
-
-  const tasks = await readJsonArray(TASKS_FILE_PATH);
   const newTask = buildTaskRecord(payload);
 
-  tasks.push(newTask);
-  await writeJsonArray(TASKS_FILE_PATH, tasks);
+  await mutateJsonArray(TASKS_FILE_PATH, (tasks) => {
+    tasks.push(newTask);
+  });
 
   return newTask;
 }
 
 async function updateTask(taskId, updates) {
-  if (typeof updates.title === 'string' && updates.title.length < 2) {
-    throw new HttpError(400, 'Title is too short.');
-  }
+  const updatedTask = await mutateJsonArray(TASKS_FILE_PATH, (tasks) => {
+    const taskIndex = tasks.findIndex((item) => item.id === taskId);
 
-  if (updates.completed !== undefined && typeof updates.completed !== 'boolean') {
-    throw new HttpError(400, 'completed must be boolean');
-  }
+    if (taskIndex === -1) {
+      throw new HttpError(404, 'Task not found.');
+    }
 
-  const tasks = await readJsonArray(TASKS_FILE_PATH);
-  const taskIndex = tasks.findIndex((item) => item.id === taskId);
+    const existingTask = tasks[taskIndex];
+    const modified = {
+      ...existingTask,
+      ...(updates.title !== undefined && { title: updates.title }),
+      ...(updates.completed !== undefined && { completed: updates.completed }),
+      updatedAt: new Date().toISOString(),
+    };
 
-  if (taskIndex === -1) {
-    throw new HttpError(404, 'Task not found.');
-  }
-
-  const existingTask = tasks[taskIndex];
-  const updatedTask = {
-    ...existingTask,
-    ...updates,
-    updatedAt: new Date().toISOString(),
-  };
-
-  tasks[taskIndex] = updatedTask;
-  await writeJsonArray(TASKS_FILE_PATH, tasks);
+    tasks[taskIndex] = modified;
+    return modified;
+  });
 
   return updatedTask;
 }
 
 async function deleteTask(taskId) {
-  const tasks = await readJsonArray(TASKS_FILE_PATH);
-  const taskIndex = tasks.findIndex((item) => item.id === taskId);
+  const removedTask = await mutateJsonArray(TASKS_FILE_PATH, (tasks) => {
+    const taskIndex = tasks.findIndex((item) => item.id === taskId);
 
-  if (taskIndex === -1) {
-    throw new HttpError(404, 'Task not found.');
-  }
+    if (taskIndex === -1) {
+      throw new HttpError(404, 'Task not found.');
+    }
 
-  const [removedTask] = tasks.splice(taskIndex, 1);
-  await writeJsonArray(TASKS_FILE_PATH, tasks);
+    const [removed] = tasks.splice(taskIndex, 1);
+    return removed;
+  });
 
   return removedTask;
 }

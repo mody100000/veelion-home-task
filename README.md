@@ -1,15 +1,16 @@
-# VeeLion Frontend Assessment (Next.js)
+# VeeLion Full-Stack Assessment
 
 ## Overview
 
-This project is a **Task Management App** built with **Next.js (App Router)** and **TypeScript**.
-It includes three main pages:
+This project is a full-stack **Task Management App** built with **Next.js (App Router)** on the frontend and **Express (Node.js)** on the backend.
 
-- **Tasks**: Manage tasks with create, edit, delete, search, and pagination.
-- **Activity**: View activity logs with filters, search, and stats.
-- **Reports**: See summary statistics and task status insights.
+It includes three main modules:
 
-The frontend uses API route handlers under `app/api/*` to proxy requests to the backend.
+- **Tasks**: Manage tasks with full CRUD operations (create, edit, delete), search, and pagination.
+- **Activity**: View audit and activity logs with filters, search, and activity stats.
+- **Reports**: Centralized dashboard displaying aggregated metrics, real-time statistics, and task completion breakdown.
+
+The frontend communicates with the backend through Next.js API route handlers (`app/api/*`) as well as direct client/server API utilities.
 
 ## Screenshots
 
@@ -25,70 +26,112 @@ The frontend uses API route handlers under `app/api/*` to proxy requests to the 
 4-Reports page
 <img width="1920" height="1080" alt="2026-10-15-232231_hyprshot" src="https://github.com/user-attachments/assets/10f7d1da-cb72-414d-afd6-f41c07e6fada" />
 
+---
 
 ## Folder Structure
 
 ```bash
-frontend/
-├── app/
-│   ├── activity/
-│   ├── reports/
-│   ├── tasks/
-│   └── api/
-├── components/
-│   ├── activity/
-│   ├── reports/
-│   ├── tasks/
-│   └── common/
-├── hooks/
-├── lib/
-├── public/
-├── types/
-├── utils/
-├── globals.css
-├── next.config.mjs
-├── postcss.config.mjs
-├── tsconfig.json
-└── package.json
+.
+├── backend/
+│   ├── data/
+│   │   ├── tasks.json
+│   │   └── activity.json
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── paths.js
+│   │   ├── middleware/
+│   │   │   ├── asyncHandler.js
+│   │   │   └── errorHandler.js
+│   │   ├── modules/
+│   │   │   ├── activity/
+│   │   │   ├── reports/
+│   │   │   └── tasks/
+│   │   ├── utils/
+│   │   │   ├── httpError.js
+│   │   │   ├── id.js
+│   │   │   └── jsonStore.js
+│   │   ├── app.js
+│   │   └── server.js
+│   └── package.json
+└── frontend/
+    ├── app/
+    │   ├── activity/
+    │   ├── reports/
+    │   ├── tasks/
+    │   └── api/
+    ├── components/
+    │   ├── activity/
+    │   ├── reports/
+    │   ├── tasks/
+    │   └── common/
+    ├── hooks/
+    ├── lib/
+    ├── public/
+    ├── types/
+    ├── utils/
+    └── package.json
 ```
+
+---
 
 ## Tech Stack
 
-### Core
+### Frontend
 
-- **Next.js** `14.2.5`
-- **React** `18.2.0`
-- **TypeScript** `5.5.4`
+- **Framework:** Next.js `14.2.5` (App Router)
+- **Library:** React `18.2.0`
+- **Language:** TypeScript `5.5.4`
+- **Styling & UI:** Tailwind CSS, Lucide React, React-Toastify
 
-### UI & Styling
+### Backend
 
-- **Tailwind CSS**
-- **lucide-react**
-- **react-toastify**
+- **Runtime:** Node.js (v18+)
+- **Framework:** Express `4.x`
+- **Key Modules:** CORS, crypto UUIDv4, custom atomic JSON store with sequential mutex queueing
 
-## Installation & Run
+---
 
-### 1) Install frontend dependencies
+## Installation & Running
+
+To run the complete application, start both the backend server and frontend development server.
+
+### 1. Backend Setup
 
 ```bash
-cd frontend
+# Navigate to the backend directory
+cd backend
+
+# Install dependencies
 npm install
-```
 
-### 2) Configure environment
+# Start the server (runs on http://localhost:4000)
+npm start
 
-Create/update `.env` in `frontend/` based on `.env.example`.
-
-### 3) Run development server
-
-```bash
+# Or start in watch mode for development:
 npm run dev
 ```
 
-Open: `http://localhost:3000`
+> **Backend Port:** The server runs on `http://localhost:4000` by default (configurable via `PORT` environment variable).
 
-## Notes
+### 2. Frontend Setup
 
-- Backend endpoint reference: `frontend/docs/backend-endpoints.md`
-- Backend setup notes: `backend/README.md`
-- Code review findings: `REVIEW.md`
+In a separate terminal window:
+
+```bash
+# Navigate to the frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Configure environment variables
+# Verify or create frontend/.env:
+NEXT_PUBLIC_BACKEND_API_URL=http://localhost:4000
+
+# Start the Next.js development server (runs on http://localhost:3000)
+npm run dev
+```
+
+> **Frontend URL:** Open `http://localhost:3000` in your browser.
+
+---
