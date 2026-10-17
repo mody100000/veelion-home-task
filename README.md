@@ -15,16 +15,16 @@ The frontend communicates with the backend through Next.js API route handlers (`
 ## Screenshots
 
 1-Home page
-<img width="1920" height="1080" alt="2026-10-15-232207_hyprshot" src="https://github.com/user-attachments/assets/1f104c7c-7935-4360-9858-83b4f9f7c4d2" />
+<img width="1920" height="1080" alt="2026-10-17-235804_hyprshot" src="https://github.com/user-attachments/assets/1678fcd4-54ad-4d96-843f-a3b6e133c035" />
 
 2-Tasks Page
-<img width="1920" height="1080" alt="2026-10-15-232215_hyprshot" src="https://github.com/user-attachments/assets/744bdff9-983f-42aa-9d9b-2192a33d5586" />
+<img width="1920" height="1080" alt="2026-10-17-235809_hyprshot" src="https://github.com/user-attachments/assets/3219a615-5711-4b40-b327-c78bf911819d" />
 
 3-Activity Page
-<img width="1920" height="1080" alt="2026-10-15-232226_hyprshot" src="https://github.com/user-attachments/assets/7998ffb2-3e93-420e-a2b3-ef27693e8125" />
+<img width="1920" height="1080" alt="2026-10-17-235818_hyprshot" src="https://github.com/user-attachments/assets/81777535-8d1a-474c-a7ba-53fd32f3e6d2" />
 
 4-Reports page
-<img width="1920" height="1080" alt="2026-10-15-232231_hyprshot" src="https://github.com/user-attachments/assets/10f7d1da-cb72-414d-afd6-f41c07e6fada" />
+<img width="1920" height="1080" alt="2026-10-17-235821_hyprshot" src="https://github.com/user-attachments/assets/7d5561d5-6bd5-4892-986d-0b99c0bcdf0f" />
 
 ---
 
