@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 export function usePagination<T>(
   items: T[],
   itemsPerPage: number,
-  resetDependencies: any[] = [],
+  resetDependencies: unknown[] = [],
 ) {
   const [currentPage, setCurrentPage] = useState(1);
 

@@ -109,7 +109,7 @@ export function useTasks() {
         });
 
         // Log activity asynchronously
-        requestJson<any>("/api/activity", {
+        requestJson<unknown>("/api/activity", {
           method: "POST",
           body: JSON.stringify({
             action: "status_changed",
@@ -149,7 +149,7 @@ export function useTasks() {
         });
 
         // Log activity asynchronously
-        requestJson<any>("/api/activity", {
+        requestJson<unknown>("/api/activity", {
           method: "POST",
           body: JSON.stringify({
             action: "created",
@@ -187,7 +187,7 @@ export function useTasks() {
         });
 
         // Log activity asynchronously
-        requestJson<any>("/api/activity", {
+        requestJson<unknown>("/api/activity", {
           method: "POST",
           body: JSON.stringify({
             action: "updated",
@@ -226,7 +226,7 @@ export function useTasks() {
         });
 
         // Log activity asynchronously
-        requestJson<any>("/api/activity", {
+        requestJson<unknown>("/api/activity", {
           method: "POST",
           body: JSON.stringify({
             action: "deleted",
