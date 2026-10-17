@@ -1,32 +1,35 @@
-const path = require('node:path');
-const { readJsonArray } = require('../../../utils/jsonStore');
+const tasksService = require('../../tasks/services/tasks.service');
+const activityService = require('../../activity/services/activity.service');
 
-const TASKS_FILE_PATH = path.join(process.cwd(), 'data', 'tasks.json');
-const ACTIVITY_FILE_PATH = path.join(process.cwd(), 'data', 'activity.json');
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 async function getTasksSummary() {
   const [tasks, activities] = await Promise.all([
-    readJsonArray(TASKS_FILE_PATH),
-    readJsonArray(ACTIVITY_FILE_PATH)
+    tasksService.getAllTasks(),
+    activityService.getAllActivity(),
   ]);
 
   const total = tasks.length;
 
   const byStatus = {
-    todo: tasks.filter(t => !t.completed).length,
-    "in-progress": 0,
-    done: tasks.filter(t => t.completed).length
+    todo: tasks.filter((t) => !t.completed).length,
+    'in-progress': 0,
+    done: tasks.filter((t) => t.completed).length,
   };
 
-  const recentActivityCount = activities.length;
+  const now = Date.now();
+  const recentActivityCount = activities.filter((activity) => {
+    const timestamp = new Date(activity.when || activity.createdAt).getTime();
+    return !Number.isNaN(timestamp) && now - timestamp < ONE_DAY_MS;
+  }).length;
 
   return {
     total,
     byStatus,
-    recentActivityCount
+    recentActivityCount,
   };
 }
 
 module.exports = {
-  getTasksSummary
+  getTasksSummary,
 };

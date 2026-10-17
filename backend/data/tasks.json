@@ -58,8 +58,36 @@
   {
     "id": "22e95328-ce32-46ed-81a4-0aa161230d60",
     "title": "Patch the NVIDIA drivers via DKMS",
-    "completed": true,
+    "completed": false,
     "createdAt": "2026-10-15T16:04:25.229Z",
-    "updatedAt": "2026-10-15T16:04:31.621Z"
+    "updatedAt": "2026-10-17T20:34:01.132Z"
+  },
+  {
+    "id": "0c625cb9-01c1-4087-911b-e70bc5aa6ed4",
+    "title": "test",
+    "completed": true,
+    "createdAt": "2026-10-16T23:28:11.902Z",
+    "updatedAt": "2026-10-16T23:28:23.654Z"
+  },
+  {
+    "id": "4d18fa20-91bc-40a2-8cb1-18e47bf91001",
+    "title": "Audit responsive layout on mobile viewport",
+    "completed": true,
+    "createdAt": "2026-10-17T11:15:20.140Z",
+    "updatedAt": "2026-10-17T11:42:05.812Z"
+  },
+  {
+    "id": "7b52de19-4a01-49fa-987d-304ab6e81002",
+    "title": "Verify API error handling for task status cards",
+    "completed": true,
+    "createdAt": "2026-10-17T14:22:10.510Z",
+    "updatedAt": "2026-10-17T14:48:33.220Z"
+  },
+  {
+    "id": "a9310bc4-52de-4ec1-a90f-927cb4101003",
+    "title": "Finalize README documentation and setup instructions",
+    "completed": false,
+    "createdAt": "2026-10-17T17:05:42.330Z",
+    "updatedAt": "2026-10-17T17:05:42.330Z"
   }
 ]

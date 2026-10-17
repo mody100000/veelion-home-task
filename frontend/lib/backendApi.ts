@@ -154,20 +154,28 @@ export async function deleteTaskInBackend(taskId: string): Promise<void> {
 }
 
 export async function getActivityFromBackend(): Promise<ActivityLog[]> {
-  const body = await requestBackendJson<ActivityLog[]>("/activity");
+  const body = await requestBackendJson<
+    ActivityLog[] | { data: ActivityLog[] }
+  >("/activity");
 
-  if (!Array.isArray(body)) {
-    throw new Error("Invalid activity response shape from backend.");
+  if (Array.isArray(body)) {
+    return body;
   }
 
-  return body;
+  if (isApiEnvelope<ActivityLog[]>(body) && Array.isArray(body.data)) {
+    return body.data;
+  }
+
+  throw new Error("Invalid activity response shape from backend.");
 }
 
 export async function createActivityInBackend(payload: {
   action: string;
   info: string;
 }): Promise<ActivityLog> {
-  const body = await requestBackendJson<ActivityLog>("/activity", {
+  const body = await requestBackendJson<
+    ActivityLog | { data: ActivityLog }
+  >("/activity", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -175,12 +183,21 @@ export async function createActivityInBackend(payload: {
     body: JSON.stringify(payload),
   });
 
-  return body;
+  if (isApiEnvelope<ActivityLog>(body) && body.data) {
+    return body.data;
+  }
+
+  return body as ActivityLog;
 }
 
 export async function getReportsSummaryFromBackend(): Promise<ReportsSummaryResponse> {
-  const body = await requestBackendJson<ReportsSummaryResponse>(
-    "/reports/tasks-summary",
-  );
-  return body;
+  const body = await requestBackendJson<
+    ReportsSummaryResponse | { data: ReportsSummaryResponse }
+  >("/reports/tasks-summary");
+
+  if (isApiEnvelope<ReportsSummaryResponse>(body) && body.data) {
+    return body.data;
+  }
+
+  return body as ReportsSummaryResponse;
 }

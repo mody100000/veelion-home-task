@@ -1,7 +1,10 @@
 const express = require('express');
-const router = express.Router();
+
+const asyncHandler = require('../../../middleware/asyncHandler');
 const reportsController = require('../controllers/reports.controller');
 
-router.get('/tasks-summary', reportsController.getTasksSummary);
+const reportsRouter = express.Router();
 
-module.exports = router;
+reportsRouter.get('/tasks-summary', asyncHandler(reportsController.getTasksSummary));
+
+module.exports = reportsRouter;

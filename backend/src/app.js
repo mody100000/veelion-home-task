@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 const tasksRouter = require('./modules/tasks/routes/tasks.routes');
 const activityRouter = require('./modules/activity/routes/activity.routes');
@@ -7,6 +8,14 @@ const errorHandler = require('./middleware/errorHandler');
 const HttpError = require('./utils/httpError');
 
 const app = express();
+
+app.use(
+  cors({
+    origin: process.env.ALLOWED_ORIGIN || '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 app.use(express.json());
 
