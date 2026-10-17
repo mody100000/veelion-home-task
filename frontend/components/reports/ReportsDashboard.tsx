@@ -6,7 +6,27 @@ import { ReportsPieChart } from "./ReportsPieChart";
 import { useReports } from "@/hooks/useReports";
 
 export function ReportsDashboard() {
-  const { data, error } = useReports();
+  const { data, loading, error } = useReports();
+
+  if (loading && !data) {
+    return (
+      <div className="space-y-6 animate-pulse">
+        <div>
+          <div className="h-8 w-40 rounded-lg bg-zinc-200 dark:bg-zinc-800 mb-2" />
+          <div className="h-4 w-64 rounded-lg bg-zinc-200 dark:bg-zinc-800" />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="h-28 rounded-xl bg-zinc-200 dark:bg-zinc-800"
+            />
+          ))}
+        </div>
+        <div className="h-72 rounded-xl bg-zinc-200 dark:bg-zinc-800" />
+      </div>
+    );
+  }
 
   if (error && !data) {
     return (
